@@ -337,16 +337,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Tap the + button to log your first one.';
 
   @override
-  String homeStreak(int days) {
-    String _temp0 = intl.Intl.pluralLogic(
-      days,
-      locale: localeName,
-      other: '$days day streak',
-      one: '1 day streak',
-      zero: 'Start a streak today',
-    );
-    return '$_temp0';
-  }
+  String get homeStreak => 'Day streak';
 
   @override
   String get statsTitle => 'Statistics';
@@ -510,6 +501,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsReminderTime => 'Reminder time';
+
+  @override
+  String get settingsTestNotification => 'Send a test notification';
+
+  @override
+  String get settingsTestNotificationSent => 'Test notification sent';
+
+  @override
+  String get settingsNotificationsBlocked =>
+      'Notifications are turned off in system settings';
 
   @override
   String get settingsFinancialProfile => 'Financial profile';

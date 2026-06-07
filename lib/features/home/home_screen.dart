@@ -148,7 +148,7 @@ class _Overview extends StatelessWidget {
       StatTile(
         icon: Icons.local_fire_department_rounded,
         value: '${summary.streak}',
-        label: l10n.homeStreak(summary.streak),
+        label: l10n.homeStreak,
         tint: AppColors.ringAmber,
       ),
     ];

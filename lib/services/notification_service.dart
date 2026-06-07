@@ -64,7 +64,11 @@ class NotificationService {
         importance: importance,
         priority: Priority.high,
       ),
-      iOS: const DarwinNotificationDetails(),
+      iOS: const DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      ),
     );
   }
 

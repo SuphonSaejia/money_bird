@@ -333,15 +333,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get homeNoTransactionsBody => 'แตะปุ่ม + เพื่อบันทึกรายการแรกของคุณ';
 
   @override
-  String homeStreak(int days) {
-    String _temp0 = intl.Intl.pluralLogic(
-      days,
-      locale: localeName,
-      other: 'สตรีค $days วัน',
-      zero: 'เริ่มสตรีควันนี้',
-    );
-    return '$_temp0';
-  }
+  String get homeStreak => 'บันทึกต่อเนื่อง';
 
   @override
   String get statsTitle => 'สถิติ';
@@ -505,6 +497,15 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get settingsReminderTime => 'เวลาแจ้งเตือน';
+
+  @override
+  String get settingsTestNotification => 'ส่งการแจ้งเตือนทดสอบ';
+
+  @override
+  String get settingsTestNotificationSent => 'ส่งการแจ้งเตือนทดสอบแล้ว';
+
+  @override
+  String get settingsNotificationsBlocked => 'การแจ้งเตือนถูกปิดในตั้งค่าระบบ';
 
   @override
   String get settingsFinancialProfile => 'ข้อมูลการเงิน';

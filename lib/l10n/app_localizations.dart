@@ -671,8 +671,8 @@ abstract class AppLocalizations {
   /// No description provided for @homeStreak.
   ///
   /// In en, this message translates to:
-  /// **'{days, plural, =0{Start a streak today} =1{1 day streak} other{{days} day streak}}'**
-  String homeStreak(int days);
+  /// **'Day streak'**
+  String get homeStreak;
 
   /// No description provided for @statsTitle.
   ///
@@ -997,6 +997,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reminder time'**
   String get settingsReminderTime;
+
+  /// No description provided for @settingsTestNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a test notification'**
+  String get settingsTestNotification;
+
+  /// No description provided for @settingsTestNotificationSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Test notification sent'**
+  String get settingsTestNotificationSent;
+
+  /// No description provided for @settingsNotificationsBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are turned off in system settings'**
+  String get settingsNotificationsBlocked;
 
   /// No description provided for @settingsFinancialProfile.
   ///

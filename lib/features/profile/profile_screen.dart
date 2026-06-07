@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,6 +13,7 @@ import '../../core/widgets/goal_card.dart';
 import '../../core/widgets/health_ring_chart.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/providers.dart';
+import '../../services/notification_service.dart';
 import '../share/share_preview_screen.dart';
 import 'widgets/edit_profile_sheet.dart';
 import 'widgets/goal_settings_sheet.dart';
@@ -246,6 +248,30 @@ class _NotificationsCard extends ConsumerWidget {
     }
   }
 
+  Future<void> _toggle(WidgetRef ref, bool value) async {
+    await ref.read(settingsProvider.notifier).setReminderEnabled(value);
+    if (value) {
+      await NotificationService.instance.requestPermissions();
+    }
+  }
+
+  Future<void> _sendTest(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final granted = await NotificationService.instance.requestPermissions();
+    if (!granted) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.settingsNotificationsBlocked)));
+      return;
+    }
+    await NotificationService.instance.showDailySummary(
+      title: l10n.notifReminderTitle,
+      body: l10n.notifReminderBody,
+      channelName: l10n.notifChannelName,
+      channelDesc: l10n.notifChannelDesc,
+    );
+    messenger.showSnackBar(SnackBar(content: Text(l10n.settingsTestNotificationSent)));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -273,7 +299,7 @@ class _NotificationsCard extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
-              Switch(value: enabled, onChanged: (v) => ref.read(settingsProvider.notifier).setReminderEnabled(v)),
+              Switch(value: enabled, onChanged: (v) => _toggle(ref, v)),
             ],
           ),
         ),
@@ -291,6 +317,15 @@ class _NotificationsCard extends ConsumerWidget {
                 showChevron: true,
                 onTap: () => _pickTime(context, ref, settings.reminderTime),
               ),
+              if (kDebugMode) ...[
+                const _HairlineDivider(),
+                _SettingRow(
+                  icon: Icons.send_rounded,
+                  tint: AppColors.income,
+                  title: l10n.settingsTestNotification,
+                  onTap: () => _sendTest(context, ref),
+                ),
+              ],
             ],
           ),
           secondChild: const SizedBox(width: double.infinity),

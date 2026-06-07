@@ -37,7 +37,6 @@ dependencies:
   flutter_riverpod: ^2.6.1
   drift: ^2.31.0
   drift_flutter: ^0.2.8
-  google_fonts: ^8.1.0
   fl_chart: ^1.2.0
   intl: ^0.20.2
   flutter_local_notifications: ^20.1.0
@@ -88,6 +87,20 @@ flutter:
 
   assets:
     - assets/branding/
+
+  # Bundled so the brand font works offline / on every platform (no runtime
+  # download). Prompt — Cadson Demak, OFL.
+  fonts:
+    - family: Prompt
+      fonts:
+        - asset: assets/fonts/Prompt-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Prompt-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Prompt-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Prompt-Bold.ttf
+          weight: 700
 
   # To add assets to your application, add an assets section, like this:
   # assets:

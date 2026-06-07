@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -29,8 +28,8 @@ class ShareCard extends StatelessWidget {
     final dark = AppColors.textPrimary;
     final muted = AppColors.textSecondary;
 
-    TextStyle prompt(double s, FontWeight w, Color c) =>
-        GoogleFonts.prompt(fontSize: s, fontWeight: w, color: c, height: 1.1);
+    TextStyle prompt(double s, FontWeight w, Color c) => TextStyle(
+        fontFamily: 'Prompt', fontSize: s, fontWeight: w, color: c, height: 1.1);
 
     return Container(
       width: width,

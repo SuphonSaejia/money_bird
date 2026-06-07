@@ -52,6 +52,7 @@ class AppTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: bg,
       canvasColor: bg,
+      fontFamily: 'Prompt',
       textTheme: textTheme,
       primaryColor: AppColors.primary,
       splashFactory: InkRipple.splashFactory,

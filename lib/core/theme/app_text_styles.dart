@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
-/// Typography built on Google Fonts "Prompt" (a Thai + Latin family, so it
-/// renders both languages with one consistent voice).
+/// Typography built on the bundled **Prompt** font (a Thai + Latin family, so it
+/// renders both languages with one consistent voice). Bundled as an asset —
+/// see `pubspec.yaml` — so it works offline on every platform.
 class AppTextStyles {
   AppTextStyles._();
+
+  static const String fontFamily = 'Prompt';
 
   /// Builds a Prompt-based [TextTheme] tinted for the given text colours.
   static TextTheme textTheme({
     required Color primary,
     required Color secondary,
   }) {
-    final base = GoogleFonts.promptTextTheme();
     TextStyle s(double size, FontWeight w, {Color? c, double? h, double? ls}) =>
-        GoogleFonts.prompt(
+        TextStyle(
+          fontFamily: fontFamily,
           fontSize: size,
           fontWeight: w,
           color: c ?? primary,
@@ -23,7 +25,7 @@ class AppTextStyles {
           letterSpacing: ls,
         );
 
-    return base.copyWith(
+    return TextTheme(
       displayLarge: s(40, FontWeight.w700, h: 1.1),
       displayMedium: s(34, FontWeight.w700, h: 1.12),
       displaySmall: s(28, FontWeight.w700, h: 1.15),
@@ -45,7 +47,8 @@ class AppTextStyles {
   /// Oversized figure used for hero money amounts (home + share card).
   static TextStyle money(double size,
           {Color color = AppColors.textPrimary, FontWeight w = FontWeight.w700}) =>
-      GoogleFonts.prompt(
+      TextStyle(
+        fontFamily: fontFamily,
         fontSize: size,
         fontWeight: w,
         color: color,

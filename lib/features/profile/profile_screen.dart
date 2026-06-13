@@ -13,6 +13,7 @@ import '../../core/widgets/brand_logo.dart';
 import '../../core/widgets/gradient_scaffold.dart';
 import '../../core/widgets/goal_card.dart';
 import '../../core/widgets/health_ring_chart.dart';
+import '../../core/widgets/section_header.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/providers.dart';
 import '../../services/backup_service.dart';
@@ -43,15 +44,21 @@ class ProfileScreen extends ConsumerWidget {
             children: [
               Text(l10n.settingsTitle, style: theme.textTheme.headlineMedium),
               const SizedBox(height: AppSpacing.xl),
+              // ── My money ──────────────────────────────────────────────
+              SectionHeader(title: l10n.settingsZoneMoney),
+              const SizedBox(height: AppSpacing.lg),
               const _HealthSummaryCard(),
               const SizedBox(height: AppSpacing.lg),
               const _GoalSection(),
               const SizedBox(height: AppSpacing.lg),
+              const _FinancialProfileCard(),
+              const SizedBox(height: AppSpacing.xxl),
+              // ── App settings ──────────────────────────────────────────
+              SectionHeader(title: l10n.settingsZoneApp),
+              const SizedBox(height: AppSpacing.lg),
               const _PreferencesCard(),
               const SizedBox(height: AppSpacing.lg),
               const _NotificationsCard(),
-              const SizedBox(height: AppSpacing.lg),
-              const _FinancialProfileCard(),
               const SizedBox(height: AppSpacing.lg),
               const _DataCard(),
               const SizedBox(height: AppSpacing.lg),
@@ -404,11 +411,7 @@ class _DataCard extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final messenger = ScaffoldMessenger.of(context);
 
-    final picked = await FilePicker.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['json'],
-      withData: true,
-    );
+    final picked = await FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['json'], withData: true);
     if (picked == null || picked.files.isEmpty) return;
     if (!context.mounted) return;
 
@@ -418,14 +421,8 @@ class _DataCard extends ConsumerWidget {
         title: Text(l10n.restoreConfirmTitle),
         content: Text(l10n.restoreConfirmBody),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(l10n.commonCancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(l10n.commonRestore),
-          ),
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: Text(l10n.commonCancel)),
+          FilledButton(onPressed: () => Navigator.of(dialogContext).pop(true), child: Text(l10n.commonRestore)),
         ],
       ),
     );
@@ -434,22 +431,17 @@ class _DataCard extends ConsumerWidget {
     final file = picked.files.first;
     final bytes = file.bytes;
     if (bytes == null) {
-      messenger.showSnackBar(
-          SnackBar(content: Text(l10n.restoreErrorCorrupt)));
+      messenger.showSnackBar(SnackBar(content: Text(l10n.restoreErrorCorrupt)));
       return;
     }
 
     try {
-      final summary = await ref
-          .read(backupServiceProvider)
-          .restoreFromJson(String.fromCharCodes(bytes));
+      final summary = await ref.read(backupServiceProvider).restoreFromJson(String.fromCharCodes(bytes));
       // Profile & settings live in SharedPreferences-backed notifiers; nudge
       // them to reload. Transaction/budget streams update on their own.
       ref.invalidate(profileProvider);
       ref.invalidate(settingsProvider);
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.restoreSuccess(summary.transactions))),
-      );
+      messenger.showSnackBar(SnackBar(content: Text(l10n.restoreSuccess(summary.transactions))));
     } on BackupException catch (e) {
       final message = switch (e.error) {
         BackupError.notMoneyBird => l10n.restoreErrorNotMoneyBird,
@@ -458,8 +450,7 @@ class _DataCard extends ConsumerWidget {
       };
       messenger.showSnackBar(SnackBar(content: Text(message)));
     } catch (_) {
-      messenger.showSnackBar(
-          SnackBar(content: Text(l10n.restoreErrorCorrupt)));
+      messenger.showSnackBar(SnackBar(content: Text(l10n.restoreErrorCorrupt)));
     }
   }
 
@@ -601,15 +592,13 @@ class _SettingRow extends StatelessWidget {
                   ),
           ),
           if (value != null)
-            Flexible(
-              child: Text(
-                value!,
-                textAlign: TextAlign.end,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w500,
-                ),
+            Text(
+              value!,
+              textAlign: TextAlign.end,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w500,
               ),
             ),
           if (showChevron) ...[

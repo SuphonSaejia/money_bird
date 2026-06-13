@@ -158,6 +158,8 @@
   "catOtherIncome": "รายรับอื่น ๆ",
 
   "settingsTitle": "โปรไฟล์",
+  "settingsZoneMoney": "การเงินของฉัน",
+  "settingsZoneApp": "ตั้งค่าแอพ",
   "settingsPreferences": "การตั้งค่า",
   "settingsLanguage": "ภาษา",
   "settingsLanguageSystem": "ตามระบบ",

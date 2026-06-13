@@ -459,6 +459,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get settingsTitle => 'โปรไฟล์';
 
   @override
+  String get settingsZoneMoney => 'การเงินของฉัน';
+
+  @override
+  String get settingsZoneApp => 'ตั้งค่าแอพ';
+
+  @override
   String get settingsPreferences => 'การตั้งค่า';
 
   @override

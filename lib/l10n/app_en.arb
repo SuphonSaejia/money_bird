@@ -158,6 +158,8 @@
   "catOtherIncome": "Other income",
 
   "settingsTitle": "Profile",
+  "settingsZoneMoney": "My money",
+  "settingsZoneApp": "App settings",
   "settingsPreferences": "Preferences",
   "settingsLanguage": "Language",
   "settingsLanguageSystem": "System default",

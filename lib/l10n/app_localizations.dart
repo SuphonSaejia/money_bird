@@ -920,6 +920,18 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get settingsTitle;
 
+  /// No description provided for @settingsZoneMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'My money'**
+  String get settingsZoneMoney;
+
+  /// No description provided for @settingsZoneApp.
+  ///
+  /// In en, this message translates to:
+  /// **'App settings'**
+  String get settingsZoneApp;
+
   /// No description provided for @settingsPreferences.
   ///
   /// In en, this message translates to:

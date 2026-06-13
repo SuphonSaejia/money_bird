@@ -37,12 +37,7 @@ class HomeScreen extends ConsumerWidget {
       body: SafeArea(
         bottom: false,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.page,
-            AppSpacing.md,
-            AppSpacing.page,
-            110,
-          ),
+          padding: const EdgeInsets.fromLTRB(AppSpacing.page, AppSpacing.md, AppSpacing.page, 110),
           children: [
             _TopBar(locale: locale),
             const SizedBox(height: AppSpacing.xl),
@@ -53,10 +48,7 @@ class HomeScreen extends ConsumerWidget {
             _Overview(summary: summary, locale: locale),
             const _BudgetGlance(),
             const SizedBox(height: AppSpacing.xxl),
-            GoalCard(
-              plan: ref.watch(goalPlanProvider),
-              onTap: () => openSavingsScreen(context),
-            ),
+            GoalCard(plan: ref.watch(goalPlanProvider), onTap: () => openSavingsScreen(context)),
             const SizedBox(height: AppSpacing.xxl),
             SectionHeader(
               title: l10n.homeRecent,
@@ -86,8 +78,8 @@ class _TopBar extends StatelessWidget {
     final greeting = hour < 12
         ? l10n.homeGreetingMorning
         : hour < 18
-            ? l10n.homeGreetingAfternoon
-            : l10n.homeGreetingEvening;
+        ? l10n.homeGreetingAfternoon
+        : l10n.homeGreetingEvening;
     final dateLabel = DateFormat.MMMMEEEEd(locale).format(now);
 
     return Row(
@@ -97,32 +89,16 @@ class _TopBar extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                greeting,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.headlineMedium,
-              ),
+              Text(greeting, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.headlineMedium),
               const SizedBox(height: AppSpacing.xs),
-              Text(
-                dateLabel,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodyMedium,
-              ),
+              Text(dateLabel, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.bodyMedium),
             ],
           ),
         ),
         const SizedBox(width: AppSpacing.md),
-        SoftIconButton(
-          icon: Icons.ios_share_rounded,
-          onPressed: () => openSharePreview(context),
-        ),
+        SoftIconButton(icon: Icons.ios_share_rounded, onPressed: () => openSharePreview(context)),
         const SizedBox(width: AppSpacing.md),
-        const SoftIconButton(
-          icon: Icons.notifications_none_rounded,
-          showDot: true,
-        ),
+        const SoftIconButton(icon: Icons.notifications_none_rounded, showDot: true),
       ],
     );
   }
@@ -153,7 +129,7 @@ class _Overview extends StatelessWidget {
       ),
       StatTile(
         icon: Icons.savings_rounded,
-        value: CurrencyFormatter.format(summary.net, locale: locale),
+        value: CurrencyFormatter.format(summary.net < 0 ? 0 : summary.net, locale: locale),
         label: l10n.homeSaved,
         tint: AppColors.income,
       ),
@@ -235,8 +211,7 @@ class _BudgetGlance extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        CurrencyFormatter.format(overview.overallSpent,
-                            locale: locale),
+                        CurrencyFormatter.format(overview.overallSpent, locale: locale),
                         style: theme.textTheme.headlineSmall,
                       ),
                     ),
@@ -259,12 +234,8 @@ class _BudgetGlance extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   over
-                      ? l10n.budgetOver(CurrencyFormatter.format(
-                          -overview.overallRemaining,
-                          locale: locale))
-                      : l10n.budgetLeft(CurrencyFormatter.format(
-                          overview.overallRemaining,
-                          locale: locale)),
+                      ? l10n.budgetOver(CurrencyFormatter.format(-overview.overallRemaining, locale: locale))
+                      : l10n.budgetLeft(CurrencyFormatter.format(overview.overallRemaining, locale: locale)),
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: over ? AppColors.danger : AppColors.income,
                     fontWeight: FontWeight.w600,

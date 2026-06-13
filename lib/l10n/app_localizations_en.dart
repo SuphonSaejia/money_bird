@@ -463,6 +463,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTitle => 'Profile';
 
   @override
+  String get settingsZoneMoney => 'My money';
+
+  @override
+  String get settingsZoneApp => 'App settings';
+
+  @override
   String get settingsPreferences => 'Preferences';
 
   @override

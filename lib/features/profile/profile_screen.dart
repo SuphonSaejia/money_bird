@@ -18,6 +18,7 @@ import '../../providers/providers.dart';
 import '../../services/backup_service.dart';
 import '../../services/notification_service.dart';
 import '../budget/budget_screen.dart';
+import '../savings/savings_screen.dart';
 import '../share/share_preview_screen.dart';
 import 'widgets/edit_profile_sheet.dart';
 import 'widgets/goal_settings_sheet.dart';
@@ -360,6 +361,14 @@ class _FinancialProfileCard extends ConsumerWidget {
         ),
         const _HairlineDivider(),
         _SettingRow(
+          icon: Icons.savings_rounded,
+          tint: AppColors.income,
+          title: l10n.settingsSavings,
+          showChevron: true,
+          onTap: () => openSavingsScreen(context),
+        ),
+        const _HairlineDivider(),
+        _SettingRow(
           icon: Icons.account_balance_wallet_rounded,
           tint: AppColors.ringCoral,
           title: l10n.settingsBudget,
@@ -497,7 +506,7 @@ class _AboutCard extends StatelessWidget {
           icon: Icons.info_outline_rounded,
           tint: AppColors.textSecondary,
           title: l10n.settingsVersion,
-          value: '1.1.0',
+          value: '1.2.0',
         ),
         const _HairlineDivider(),
         Padding(

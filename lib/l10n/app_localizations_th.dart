@@ -655,6 +655,46 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
+  String get settingsSavings => 'เงินออม';
+
+  @override
+  String get savingsTitle => 'เงินออม';
+
+  @override
+  String get savingsBalance => 'ยอดเงินออม';
+
+  @override
+  String get savingsDeposit => 'เพิ่มเงินออม';
+
+  @override
+  String get savingsWithdraw => 'ถอน';
+
+  @override
+  String get savingsDepositTitle => 'เพิ่มเงินออม';
+
+  @override
+  String get savingsWithdrawTitle => 'ถอนเงินออม';
+
+  @override
+  String get savingsHistory => 'ประวัติการออม';
+
+  @override
+  String get savingsInThisMonth => 'เข้าเดือนนี้';
+
+  @override
+  String get savingsOutThisMonth => 'ออกเดือนนี้';
+
+  @override
+  String get savingsDeleteConfirm => 'ลบรายการออมนี้?';
+
+  @override
+  String get savingsEmptyTitle => 'เริ่มออมเงิน';
+
+  @override
+  String get savingsEmptyBody =>
+      'บันทึกเงินที่กันไว้ แล้วดูเป้าหมาย เงินสำรองฉุกเฉิน และคะแนนเติบโต';
+
+  @override
   String get shareCardTitle => 'สุขภาพการเงินของฉัน';
 
   @override

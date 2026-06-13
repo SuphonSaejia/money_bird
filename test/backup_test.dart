@@ -51,6 +51,18 @@ void main() {
     ));
     await db.upsertBudget(overallBudgetId, 20000);
     await db.upsertBudget('food', 6000);
+    await db.upsertSavingsEntry(SavingsEntriesCompanion.insert(
+      id: 's1',
+      amount: 5000,
+      deposit: true,
+      date: DateTime(2026, 6, 5),
+    ));
+    await db.upsertSavingsEntry(SavingsEntriesCompanion.insert(
+      id: 's2',
+      amount: 1000,
+      deposit: false,
+      date: DateTime(2026, 6, 8),
+    ));
     await profiles.save(
         const FinancialProfile(monthlyIncome: 50000, fixedExpenses: 20000));
     await settings.setThemeMode(ThemeMode.dark);
@@ -59,7 +71,7 @@ void main() {
     final json = await service.buildJson(now: DateTime(2026, 6, 13));
 
     // Simulate a fresh install: wipe the stores before restoring.
-    await db.replaceAll(txns: [], budgetRows: []);
+    await db.replaceAll(txns: [], budgetRows: [], savingsRows: []);
     await profiles.save(FinancialProfile.empty);
     await settings.setThemeMode(ThemeMode.light);
     await settings.setLocaleCode('en');
@@ -79,9 +91,28 @@ void main() {
     expect(budgets.overall, 20000);
     expect(budgets.perCategory['food'], 6000);
 
+    final savings = await db.getAllSavings();
+    expect(savings, hasLength(2));
+    expect(savings.firstWhere((s) => s.id == 's1').deposit, isTrue);
+    expect(savings.firstWhere((s) => s.id == 's2').deposit, isFalse);
+
     expect(profiles.load().monthlyIncome, 50000);
     expect(settings.load().themeMode, ThemeMode.dark);
     expect(settings.load().localeCode, 'th');
+  });
+
+  test('restores a v1 backup with no savings ledger', () async {
+    const v1 = '{"app":"money_bird","backupVersion":1,'
+        '"profile":{"monthlyIncome":40000},'
+        '"budgets":[{"categoryId":"overall","amount":12000}],'
+        '"transactions":[]}';
+
+    final summary = await service.restoreFromJson(v1);
+
+    expect(summary.transactions, 0);
+    expect(summary.budgets, 1);
+    expect(await db.getAllSavings(), isEmpty);
+    expect(profiles.load().monthlyIncome, 40000);
   });
 
   test('rejects malformed JSON', () {

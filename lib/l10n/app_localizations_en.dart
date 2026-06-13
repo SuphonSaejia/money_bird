@@ -87,13 +87,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onbIncomeTitle => 'What\'s your monthly income?';
 
   @override
-  String get onbIncomeBody => 'Your take-home pay after tax — salary, freelance, everything.';
+  String get onbIncomeBody =>
+      'Your take-home pay after tax — salary, freelance, everything.';
 
   @override
   String get onbExpensesTitle => 'What are your fixed monthly expenses?';
 
   @override
-  String get onbExpensesBody => 'Rent, bills, subscriptions and other regular costs.';
+  String get onbExpensesBody =>
+      'Rent, bills, subscriptions and other regular costs.';
 
   @override
   String get onbSavingsTitle => 'How much have you saved so far?';
@@ -105,7 +107,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onbDebtTitle => 'How much do you pay toward debt monthly?';
 
   @override
-  String get onbDebtBody => 'Loans, credit cards and instalments. Enter 0 if none.';
+  String get onbDebtBody =>
+      'Loans, credit cards and instalments. Enter 0 if none.';
 
   @override
   String get onbGoalTitle => 'How much do you want to save each month?';
@@ -117,7 +120,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onbResultTitle => 'Your financial health';
 
   @override
-  String get onbResultBody => 'Here\'s where you stand today. Track your spending and watch this grow.';
+  String get onbResultBody =>
+      'Here\'s where you stand today. Track your spending and watch this grow.';
 
   @override
   String get onbResultCta => 'Enter Money Bird';
@@ -141,16 +145,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get healthNeedsWork => 'Needs work';
 
   @override
-  String get healthExcellentTip => 'Outstanding! Your money habits are working beautifully.';
+  String get healthExcellentTip =>
+      'Outstanding! Your money habits are working beautifully.';
 
   @override
-  String get healthGoodTip => 'You\'re on a solid path. A little more saving goes a long way.';
+  String get healthGoodTip =>
+      'You\'re on a solid path. A little more saving goes a long way.';
 
   @override
-  String get healthFairTip => 'Decent footing. Trimming a few expenses will lift your score.';
+  String get healthFairTip =>
+      'Decent footing. Trimming a few expenses will lift your score.';
 
   @override
-  String get healthNeedsWorkTip => 'Let\'s build momentum — small daily wins add up fast.';
+  String get healthNeedsWorkTip =>
+      'Let\'s build momentum — small daily wins add up fast.';
 
   @override
   String get metricSavingsRate => 'Savings rate';
@@ -202,7 +210,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get retirementSetupHint => 'Add your age and monthly expenses to plan your retirement.';
+  String get retirementSetupHint =>
+      'Add your age and monthly expenses to plan your retirement.';
 
   @override
   String retirementProgressOf(String saved, String target) {
@@ -261,7 +270,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get goalSetupHint => 'Set a target amount and year to start tracking this goal.';
+  String get goalSetupHint =>
+      'Set a target amount and year to start tracking this goal.';
 
   @override
   String goalSavingFor(String name) {
@@ -283,7 +293,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onbAgeTitle => 'How old are you?';
 
   @override
-  String get onbAgeBody => 'We\'ll use this to plan your retirement savings and guide you there.';
+  String get onbAgeBody =>
+      'We\'ll use this to plan your retirement savings and guide you there.';
 
   @override
   String get homeGreetingMorning => 'Good morning';
@@ -322,7 +333,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNoTransactions => 'No transactions yet';
 
   @override
-  String get homeNoTransactionsBody => 'Tap the + button to log your first one.';
+  String get homeNoTransactionsBody =>
+      'Tap the + button to log your first one.';
 
   @override
   String get homeStreak => 'Day streak';
@@ -484,7 +496,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsDailyReminder => 'Daily spending reminder';
 
   @override
-  String get settingsDailyReminderBody => 'We\'ll nudge you to log today\'s spending.';
+  String get settingsDailyReminderBody =>
+      'We\'ll nudge you to log today\'s spending.';
 
   @override
   String get settingsReminderTime => 'Reminder time';
@@ -496,7 +509,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTestNotificationSent => 'Test notification sent';
 
   @override
-  String get settingsNotificationsBlocked => 'Notifications are turned off in system settings';
+  String get settingsNotificationsBlocked =>
+      'Notifications are turned off in system settings';
 
   @override
   String get settingsFinancialProfile => 'Financial profile';
@@ -529,13 +543,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsRestore => 'Restore from a backup';
 
   @override
-  String get settingsRestoreBody => 'Import a backup file — replaces current data.';
+  String get settingsRestoreBody =>
+      'Import a backup file — replaces current data.';
 
   @override
   String get backupShareSubject => 'Money Bird backup';
 
   @override
-  String get backupExportError => 'Couldn\'t create the backup. Please try again.';
+  String get backupExportError =>
+      'Couldn\'t create the backup. Please try again.';
 
   @override
   String get restoreConfirmTitle => 'Restore this backup?';
@@ -556,10 +572,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get restoreErrorCorrupt => 'That file isn\'t a valid Money Bird backup.';
+  String get restoreErrorCorrupt =>
+      'That file isn\'t a valid Money Bird backup.';
 
   @override
-  String get restoreErrorNotMoneyBird => 'That file isn\'t a Money Bird backup.';
+  String get restoreErrorNotMoneyBird =>
+      'That file isn\'t a Money Bird backup.';
 
   @override
   String get restoreErrorVersion =>
@@ -602,7 +620,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get budgetEmptyTitle => 'No budget yet';
 
   @override
-  String get budgetEmptyBody => 'Set a monthly budget to track spending and lift your health score.';
+  String get budgetEmptyBody =>
+      'Set a monthly budget to track spending and lift your health score.';
 
   @override
   String get budgetSetCta => 'Set a budget';
@@ -646,6 +665,46 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get settingsSavings => 'Savings';
+
+  @override
+  String get savingsTitle => 'Savings';
+
+  @override
+  String get savingsBalance => 'Savings balance';
+
+  @override
+  String get savingsDeposit => 'Add to savings';
+
+  @override
+  String get savingsWithdraw => 'Withdraw';
+
+  @override
+  String get savingsDepositTitle => 'Add to savings';
+
+  @override
+  String get savingsWithdrawTitle => 'Withdraw from savings';
+
+  @override
+  String get savingsHistory => 'Savings activity';
+
+  @override
+  String get savingsInThisMonth => 'In this month';
+
+  @override
+  String get savingsOutThisMonth => 'Out this month';
+
+  @override
+  String get savingsDeleteConfirm => 'Remove this savings entry?';
+
+  @override
+  String get savingsEmptyTitle => 'Start saving';
+
+  @override
+  String get savingsEmptyBody =>
+      'Log money you set aside and watch your goal, safety net and score grow.';
+
+  @override
   String get shareCardTitle => 'My financial health';
 
   @override
@@ -681,7 +740,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifReminderTitle => 'Track today\'s spending';
 
   @override
-  String get notifReminderBody => 'How much did you spend today? Tap to log it before you forget.';
+  String get notifReminderBody =>
+      'How much did you spend today? Tap to log it before you forget.';
 
   @override
   String get notifSummaryTitle => 'Today\'s wrap-up';

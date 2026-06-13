@@ -36,13 +36,29 @@ class Budgets extends Table {
 /// Sentinel [Budgets.categoryId] for the overall monthly budget.
 const String overallBudgetId = 'overall';
 
-@DriftDatabase(tables: [Transactions, Budgets])
+/// A deliberate movement of money into ([deposit] = true) or out of savings.
+/// Each entry adjusts the user's running savings balance
+/// (`FinancialProfile.currentSavings`); the table itself is the activity log.
+/// Amounts are always stored positive.
+class SavingsEntries extends Table {
+  TextColumn get id => text()();
+  RealColumn get amount => real()();
+  BoolColumn get deposit => boolean()();
+  TextColumn get note => text().nullable()();
+  DateTimeColumn get date => dateTime()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DriftDatabase(tables: [Transactions, Budgets, SavingsEntries])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor])
       : super(executor ?? driftDatabase(name: 'money_bird'));
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -50,6 +66,9 @@ class AppDatabase extends _$AppDatabase {
         onUpgrade: (m, from, to) async {
           if (from < 2) {
             await m.createTable(budgets);
+          }
+          if (from < 3) {
+            await m.createTable(savingsEntries);
           }
         },
       );
@@ -123,20 +142,49 @@ class AppDatabase extends _$AppDatabase {
     return (delete(budgets)..where((b) => b.categoryId.equals(categoryId))).go();
   }
 
+  // ── Savings entries ──────────────────────────────────────────────────────────
+
+  /// All savings entries, newest first.
+  Stream<List<SavingsEntry>> watchSavings() {
+    return (select(savingsEntries)
+          ..orderBy([
+            (e) => OrderingTerm.desc(e.date),
+            (e) => OrderingTerm.desc(e.createdAt),
+          ]))
+        .watch();
+  }
+
+  Future<List<SavingsEntry>> getAllSavings() {
+    return (select(savingsEntries)
+          ..orderBy([(e) => OrderingTerm.desc(e.date)]))
+        .get();
+  }
+
+  Future<void> upsertSavingsEntry(SavingsEntriesCompanion entry) {
+    return into(savingsEntries).insertOnConflictUpdate(entry);
+  }
+
+  Future<void> deleteSavingsEntry(String id) {
+    return (delete(savingsEntries)..where((e) => e.id.equals(id))).go();
+  }
+
   // ── Backup / restore ─────────────────────────────────────────────────────────
 
-  /// Atomically replaces ALL stored data (transactions + budgets) with the
-  /// given rows. Used when restoring a backup.
+  /// Atomically replaces ALL stored data (transactions + budgets + savings)
+  /// with the given rows. Used when restoring a backup.
   Future<void> replaceAll({
     required List<TransactionsCompanion> txns,
     required List<BudgetsCompanion> budgetRows,
+    required List<SavingsEntriesCompanion> savingsRows,
   }) {
     return transaction(() async {
       await delete(transactions).go();
       await delete(budgets).go();
+      await delete(savingsEntries).go();
       await batch((b) {
         b.insertAll(transactions, txns);
         b.insertAll(budgets, budgetRows);
+        b.insertAll(savingsEntries, savingsRows);
       });
     });
   }

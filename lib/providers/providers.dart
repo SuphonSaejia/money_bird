@@ -8,12 +8,14 @@ import '../data/models/financial_profile.dart';
 import '../data/models/transaction_type.dart';
 import '../data/repositories/budget_repository.dart';
 import '../data/repositories/profile_repository.dart';
+import '../data/repositories/savings_repository.dart';
 import '../data/repositories/settings_repository.dart';
 import '../data/repositories/transaction_repository.dart';
 import '../domain/budget.dart';
 import '../domain/financial_health.dart';
 import '../domain/goal_plan.dart';
 import '../domain/month_summary.dart';
+import '../domain/savings.dart';
 import '../services/backup_service.dart';
 
 /// ── Bootstrap ──────────────────────────────────────────────────────────────
@@ -42,6 +44,10 @@ final transactionRepositoryProvider = Provider<TransactionRepository>(
 
 final budgetRepositoryProvider = Provider<BudgetRepository>(
   (ref) => BudgetRepository(ref.watch(appDatabaseProvider)),
+);
+
+final savingsRepositoryProvider = Provider<SavingsRepository>(
+  (ref) => SavingsRepository(ref.watch(appDatabaseProvider)),
 );
 
 final backupServiceProvider = Provider<BackupService>(
@@ -183,3 +189,63 @@ final financialHealthProvider = Provider<FinancialHealth>((ref) {
 final goalPlanProvider = Provider<GoalPlan>((ref) {
   return GoalPlan.from(ref.watch(profileProvider), nowYear: DateTime.now().year);
 });
+
+/// ── Savings ledger ───────────────────────────────────────────────────────────
+final savingsEntriesProvider = StreamProvider.autoDispose<List<SavingsEntry>>(
+  (ref) => ref.watch(savingsRepositoryProvider).watch(),
+);
+
+/// Activity figures for the savings screen. The balance is the authoritative
+/// `currentSavings` from the profile; the rest is derived from the ledger.
+final savingsSummaryProvider = Provider<SavingsSummary>((ref) {
+  final balance = ref.watch(profileProvider).currentSavings;
+  final entries = ref
+      .watch(savingsEntriesProvider)
+      .maybeWhen(data: (e) => e, orElse: () => const <SavingsEntry>[]);
+  return SavingsSummary.compute(balance: balance, entries: entries);
+});
+
+/// Records deposits / withdrawals and keeps the authoritative savings balance
+/// (`FinancialProfile.currentSavings`) in step, so the goal, emergency fund and
+/// health score all react to logged savings activity.
+class SavingsActions {
+  SavingsActions(this._ref);
+
+  final Ref _ref;
+
+  SavingsRepository get _repo => _ref.read(savingsRepositoryProvider);
+
+  Future<void> deposit(double amount, {String? note, DateTime? date}) =>
+      _record(amount: amount, deposit: true, note: note, date: date);
+
+  Future<void> withdraw(double amount, {String? note, DateTime? date}) =>
+      _record(amount: amount, deposit: false, note: note, date: date);
+
+  Future<void> _record({
+    required double amount,
+    required bool deposit,
+    String? note,
+    DateTime? date,
+  }) async {
+    if (amount <= 0) return;
+    await _repo.add(amount: amount, deposit: deposit, note: note, date: date);
+    await _adjustBalance(deposit ? amount : -amount);
+  }
+
+  /// Removes an entry and reverses its effect on the balance.
+  Future<void> delete(SavingsEntry entry) async {
+    await _adjustBalance(entry.deposit ? -entry.amount : entry.amount);
+    await _repo.delete(entry.id);
+  }
+
+  Future<void> _adjustBalance(double delta) async {
+    final profile = _ref.read(profileProvider);
+    final next = profile.currentSavings + delta;
+    await _ref
+        .read(profileProvider.notifier)
+        .save(profile.copyWith(currentSavings: next < 0 ? 0 : next));
+  }
+}
+
+final savingsActionsProvider =
+    Provider<SavingsActions>((ref) => SavingsActions(ref));

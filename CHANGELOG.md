@@ -4,6 +4,30 @@ All notable changes to **Money Bird** are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] — 2026-06-13
+
+Make saving a habit you can see pay off.
+
+### Added
+
+- **Savings ledger** — a dedicated Savings screen where you log money you set
+  aside ("Add to savings") or take back out ("Withdraw"). Each entry adjusts
+  your running savings balance, with a clear activity history you can review and
+  remove.
+- **Your saving now moves everything** — because logged savings update your
+  balance, they directly advance your **goal progress**, grow your
+  **emergency-fund** months and lift your **financial-health score**. The daily
+  habit and the long-term picture are finally connected.
+- **Quick access** — open Savings from the goal card on Home, or from
+  *Profile → Savings*.
+
+### Changed
+
+- Database upgraded to schema v3 with a safe migration (existing data is
+  preserved).
+- Backups now include the savings ledger (backup format v2). Older v1 backups
+  still restore cleanly.
+
 ## [1.1.0] — 2026-06-13
 
 Keep your data safe, and take real control of your spending.
@@ -76,5 +100,6 @@ First release. 🐦
 - `flutter analyze` is clean; unit tests cover the financial-health and
   savings-goal math, and smoke tests cover every screen.
 
+[1.2.0]: https://github.com/SuphonSaejia/money_bird/releases/tag/v1.2.0
 [1.1.0]: https://github.com/SuphonSaejia/money_bird/releases/tag/v1.1.0
 [1.0.0]: https://github.com/SuphonSaejia/money_bird/releases/tag/v1.0.0

@@ -46,13 +46,16 @@ class BackupService {
   final ProfileRepository _profiles;
   final SettingsRepository _settings;
 
-  static const int _backupVersion = 1;
+  // v1: transactions + budgets + profile + settings.
+  // v2: adds the savings ledger.
+  static const int _backupVersion = 2;
   static const String _appTag = 'money_bird';
 
   /// Builds the full backup document as a pretty-printed JSON string.
   Future<String> buildJson({DateTime? now}) async {
     final txns = await _db.getAllTransactions();
     final budgets = await _db.getAllBudgets();
+    final savings = await _db.getAllSavings();
 
     final map = <String, dynamic>{
       'app': _appTag,
@@ -75,6 +78,17 @@ class BackupService {
             'note': t.note,
             'date': t.date.toIso8601String(),
             'createdAt': t.createdAt.toIso8601String(),
+          },
+      ],
+      'savings': [
+        for (final s in savings)
+          {
+            'id': s.id,
+            'amount': s.amount,
+            'deposit': s.deposit,
+            'note': s.note,
+            'date': s.date.toIso8601String(),
+            'createdAt': s.createdAt.toIso8601String(),
           },
       ],
     };
@@ -114,15 +128,22 @@ class BackupService {
 
     final List<TransactionsCompanion> txns;
     final List<BudgetsCompanion> budgetRows;
+    final List<SavingsEntriesCompanion> savingsRows;
     try {
       txns = _parseTransactions(map['transactions']);
       budgetRows = _parseBudgets(map['budgets']);
+      // Absent in v1 backups — tolerated as an empty ledger.
+      savingsRows = _parseSavings(map['savings']);
     } catch (_) {
       throw const BackupException(BackupError.corrupt);
     }
 
     // Apply: DB first (atomic), then the SharedPreferences-backed stores.
-    await _db.replaceAll(txns: txns, budgetRows: budgetRows);
+    await _db.replaceAll(
+      txns: txns,
+      budgetRows: budgetRows,
+      savingsRows: savingsRows,
+    );
 
     if (map['profile'] is Map) {
       await _profiles.save(
@@ -170,6 +191,27 @@ class BackupService {
           return BudgetsCompanion.insert(
             categoryId: m['categoryId'] as String,
             amount: (m['amount'] as num).toDouble(),
+          );
+        }(),
+    ];
+  }
+
+  List<SavingsEntriesCompanion> _parseSavings(Object? raw) {
+    if (raw == null) return const [];
+    final list = raw as List;
+    return [
+      for (final item in list)
+        () {
+          final m = (item as Map).cast<String, dynamic>();
+          return SavingsEntriesCompanion.insert(
+            id: m['id'] as String,
+            amount: (m['amount'] as num).toDouble(),
+            deposit: m['deposit'] as bool,
+            note: Value(m['note'] as String?),
+            date: DateTime.parse(m['date'] as String),
+            createdAt: m['createdAt'] is String
+                ? Value(DateTime.parse(m['createdAt'] as String))
+                : const Value.absent(),
           );
         }(),
     ];

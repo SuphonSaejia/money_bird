@@ -1262,6 +1262,84 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 transaction} other{{count} transactions}}'**
   String txnCount(int count);
 
+  /// No description provided for @settingsSavings.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings'**
+  String get settingsSavings;
+
+  /// No description provided for @savingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings'**
+  String get savingsTitle;
+
+  /// No description provided for @savingsBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings balance'**
+  String get savingsBalance;
+
+  /// No description provided for @savingsDeposit.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to savings'**
+  String get savingsDeposit;
+
+  /// No description provided for @savingsWithdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get savingsWithdraw;
+
+  /// No description provided for @savingsDepositTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to savings'**
+  String get savingsDepositTitle;
+
+  /// No description provided for @savingsWithdrawTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw from savings'**
+  String get savingsWithdrawTitle;
+
+  /// No description provided for @savingsHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings activity'**
+  String get savingsHistory;
+
+  /// No description provided for @savingsInThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'In this month'**
+  String get savingsInThisMonth;
+
+  /// No description provided for @savingsOutThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Out this month'**
+  String get savingsOutThisMonth;
+
+  /// No description provided for @savingsDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this savings entry?'**
+  String get savingsDeleteConfirm;
+
+  /// No description provided for @savingsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start saving'**
+  String get savingsEmptyTitle;
+
+  /// No description provided for @savingsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Log money you set aside and watch your goal, safety net and score grow.'**
+  String get savingsEmptyBody;
+
   /// No description provided for @shareCardTitle.
   ///
   /// In en, this message translates to:

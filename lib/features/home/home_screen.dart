@@ -15,6 +15,7 @@ import '../../domain/month_summary.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/providers.dart';
 import '../budget/budget_screen.dart';
+import '../savings/savings_screen.dart';
 import '../share/share_preview_screen.dart';
 import '../transactions/transactions_screen.dart';
 import 'widgets/health_card.dart';
@@ -52,7 +53,10 @@ class HomeScreen extends ConsumerWidget {
             _Overview(summary: summary, locale: locale),
             const _BudgetGlance(),
             const SizedBox(height: AppSpacing.xxl),
-            GoalCard(plan: ref.watch(goalPlanProvider)),
+            GoalCard(
+              plan: ref.watch(goalPlanProvider),
+              onTap: () => openSavingsScreen(context),
+            ),
             const SizedBox(height: AppSpacing.xxl),
             SectionHeader(
               title: l10n.homeRecent,

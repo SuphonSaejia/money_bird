@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money_bird/data/db/database.dart';
+import 'package:money_bird/domain/budget.dart';
 import 'package:money_bird/features/home/home_screen.dart';
 import 'package:money_bird/features/onboarding/onboarding_screen.dart';
 import 'package:money_bird/features/profile/profile_screen.dart';
@@ -33,6 +34,8 @@ void main() {
               .overrideWith((ref) => Stream.value(<Transaction>[])),
           currentMonthTransactionsProvider
               .overrideWith((ref) => Stream.value(<Transaction>[])),
+          budgetsProvider
+              .overrideWith((ref) => Stream.value(MonthlyBudgets.empty)),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,

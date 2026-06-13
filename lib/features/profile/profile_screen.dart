@@ -1,6 +1,8 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
@@ -13,7 +15,9 @@ import '../../core/widgets/goal_card.dart';
 import '../../core/widgets/health_ring_chart.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/providers.dart';
+import '../../services/backup_service.dart';
 import '../../services/notification_service.dart';
+import '../budget/budget_screen.dart';
 import '../share/share_preview_screen.dart';
 import 'widgets/edit_profile_sheet.dart';
 import 'widgets/goal_settings_sheet.dart';
@@ -47,6 +51,8 @@ class ProfileScreen extends ConsumerWidget {
               const _NotificationsCard(),
               const SizedBox(height: AppSpacing.lg),
               const _FinancialProfileCard(),
+              const SizedBox(height: AppSpacing.lg),
+              const _DataCard(),
               const SizedBox(height: AppSpacing.lg),
               const _AboutCard(),
             ],
@@ -352,6 +358,125 @@ class _FinancialProfileCard extends ConsumerWidget {
           showChevron: true,
           onTap: () => showEditProfileSheet(context),
         ),
+        const _HairlineDivider(),
+        _SettingRow(
+          icon: Icons.account_balance_wallet_rounded,
+          tint: AppColors.ringCoral,
+          title: l10n.settingsBudget,
+          showChevron: true,
+          onTap: () => openBudgetScreen(context),
+        ),
+      ],
+    );
+  }
+}
+
+/// ── Data & backup ────────────────────────────────────────────────────────────
+class _DataCard extends ConsumerWidget {
+  const _DataCard();
+
+  Future<void> _backup(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final file = await ref.read(backupServiceProvider).exportToFile();
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path, mimeType: 'application/json')],
+          subject: l10n.backupShareSubject,
+        ),
+      );
+    } catch (_) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.backupExportError)));
+    }
+  }
+
+  Future<void> _restore(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
+    final picked = await FilePicker.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['json'],
+      withData: true,
+    );
+    if (picked == null || picked.files.isEmpty) return;
+    if (!context.mounted) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.restoreConfirmTitle),
+        content: Text(l10n.restoreConfirmBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.commonRestore),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    final file = picked.files.first;
+    final bytes = file.bytes;
+    if (bytes == null) {
+      messenger.showSnackBar(
+          SnackBar(content: Text(l10n.restoreErrorCorrupt)));
+      return;
+    }
+
+    try {
+      final summary = await ref
+          .read(backupServiceProvider)
+          .restoreFromJson(String.fromCharCodes(bytes));
+      // Profile & settings live in SharedPreferences-backed notifiers; nudge
+      // them to reload. Transaction/budget streams update on their own.
+      ref.invalidate(profileProvider);
+      ref.invalidate(settingsProvider);
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.restoreSuccess(summary.transactions))),
+      );
+    } on BackupException catch (e) {
+      final message = switch (e.error) {
+        BackupError.notMoneyBird => l10n.restoreErrorNotMoneyBird,
+        BackupError.unsupportedVersion => l10n.restoreErrorVersion,
+        BackupError.corrupt => l10n.restoreErrorCorrupt,
+      };
+      messenger.showSnackBar(SnackBar(content: Text(message)));
+    } catch (_) {
+      messenger.showSnackBar(
+          SnackBar(content: Text(l10n.restoreErrorCorrupt)));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    return _SettingsGroup(
+      title: l10n.settingsData,
+      children: [
+        _SettingRow(
+          icon: Icons.cloud_upload_rounded,
+          tint: AppColors.primary,
+          title: l10n.settingsBackup,
+          subtitle: l10n.settingsBackupBody,
+          showChevron: true,
+          onTap: () => _backup(context, ref),
+        ),
+        const _HairlineDivider(),
+        _SettingRow(
+          icon: Icons.cloud_download_rounded,
+          tint: AppColors.income,
+          title: l10n.settingsRestore,
+          subtitle: l10n.settingsRestoreBody,
+          showChevron: true,
+          onTap: () => _restore(context, ref),
+        ),
       ],
     );
   }
@@ -372,7 +497,7 @@ class _AboutCard extends StatelessWidget {
           icon: Icons.info_outline_rounded,
           tint: AppColors.textSecondary,
           title: l10n.settingsVersion,
-          value: '1.0.0',
+          value: '1.1.0',
         ),
         const _HairlineDivider(),
         Padding(
@@ -431,6 +556,7 @@ class _SettingRow extends StatelessWidget {
     required this.icon,
     required this.tint,
     required this.title,
+    this.subtitle,
     this.value,
     this.showChevron = false,
     this.onTap,
@@ -439,6 +565,7 @@ class _SettingRow extends StatelessWidget {
   final IconData icon;
   final Color tint;
   final String title;
+  final String? subtitle;
   final String? value;
   final bool showChevron;
   final VoidCallback? onTap;
@@ -452,7 +579,18 @@ class _SettingRow extends StatelessWidget {
         children: [
           _RowIcon(icon: icon, tint: tint),
           const SizedBox(width: AppSpacing.md),
-          Expanded(child: Text(title, style: theme.textTheme.titleSmall)),
+          Expanded(
+            child: subtitle == null
+                ? Text(title, style: theme.textTheme.titleSmall)
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title, style: theme.textTheme.titleSmall),
+                      const SizedBox(height: 2),
+                      Text(subtitle!, style: theme.textTheme.bodySmall),
+                    ],
+                  ),
+          ),
           if (value != null)
             Flexible(
               child: Text(

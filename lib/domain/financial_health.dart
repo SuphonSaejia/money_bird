@@ -103,9 +103,14 @@ class FinancialHealth {
   }
 
   /// Computes the snapshot from the stable [profile] plus live month figures.
+  ///
+  /// When the user has set their own monthly [userBudget] it drives the
+  /// budget-adherence component; otherwise it falls back to the implied
+  /// `income − goal − debt` figure so existing users score unchanged.
   factory FinancialHealth.compute({
     required FinancialProfile profile,
     required double spentThisMonth,
+    double? userBudget,
     DateTime? now,
   }) {
     final today = now ?? _fallbackNow();
@@ -150,8 +155,13 @@ class FinancialHealth {
     final debtScore = _clamp01(1 - debtRatio / 0.36); // 36% DTI = zero
 
     // --- Budget adherence (0.20) ---
-    var monthlyBudget = income - goal - debt;
-    if (monthlyBudget <= 0) monthlyBudget = fixed > 0 ? fixed : income;
+    double monthlyBudget;
+    if (userBudget != null && userBudget > 0) {
+      monthlyBudget = userBudget;
+    } else {
+      monthlyBudget = income - goal - debt;
+      if (monthlyBudget <= 0) monthlyBudget = fixed > 0 ? fixed : income;
+    }
     double budgetScore;
     if (monthlyBudget <= 0) {
       budgetScore = 1.0;

@@ -43,6 +43,37 @@ class SettingsRepository {
     await _prefs.setInt(_kReminderMinute, minute);
   }
 
+  /// Serialises the user-facing preferences for a backup. [onboardingComplete]
+  /// is deliberately excluded — a restore should never re-trigger onboarding.
+  Map<String, dynamic> exportMap() {
+    final s = load();
+    return {
+      'themeMode': s.themeMode.name,
+      'localeCode': s.localeCode,
+      'reminderEnabled': s.reminderEnabled,
+      'reminderHour': s.reminderHour,
+      'reminderMinute': s.reminderMinute,
+    };
+  }
+
+  /// Applies preferences from a backup. Missing keys keep their current value.
+  Future<void> importMap(Map<String, dynamic> map) async {
+    if (map['themeMode'] is String) {
+      await setThemeMode(_themeFromString(map['themeMode'] as String));
+    }
+    if (map['localeCode'] is String) {
+      await setLocaleCode(map['localeCode'] as String);
+    }
+    if (map['reminderEnabled'] is bool) {
+      await setReminderEnabled(map['reminderEnabled'] as bool);
+    }
+    final hour = (map['reminderHour'] as num?)?.toInt();
+    final minute = (map['reminderMinute'] as num?)?.toInt();
+    if (hour != null && minute != null) {
+      await setReminderTime(hour, minute);
+    }
+  }
+
   ThemeMode _themeFromString(String? value) {
     switch (value) {
       case 'light':

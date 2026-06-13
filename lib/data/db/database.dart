@@ -21,13 +21,38 @@ class Transactions extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DriftDatabase(tables: [Transactions])
+/// A monthly spending budget. One row per scope: the special [overallBudgetId]
+/// holds the total monthly budget, and each spending category id holds an
+/// optional per-category cap. Budgets recur every month (they are not tied to a
+/// specific calendar month) to keep the model minimal.
+class Budgets extends Table {
+  TextColumn get categoryId => text()();
+  RealColumn get amount => real()();
+
+  @override
+  Set<Column> get primaryKey => {categoryId};
+}
+
+/// Sentinel [Budgets.categoryId] for the overall monthly budget.
+const String overallBudgetId = 'overall';
+
+@DriftDatabase(tables: [Transactions, Budgets])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor])
       : super(executor ?? driftDatabase(name: 'money_bird'));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (m) => m.createAll(),
+        onUpgrade: (m, from, to) async {
+          if (from < 2) {
+            await m.createTable(budgets);
+          }
+        },
+      );
 
   /// Newest transactions first.
   Stream<List<Transaction>> watchAll() {
@@ -72,5 +97,47 @@ class AppDatabase extends _$AppDatabase {
 
   Future<void> deleteTransaction(String id) {
     return (delete(transactions)..where((t) => t.id.equals(id))).go();
+  }
+
+  /// Every transaction, newest first — used by the backup export.
+  Future<List<Transaction>> getAllTransactions() {
+    return (select(transactions)
+          ..orderBy([(t) => OrderingTerm.desc(t.date)]))
+        .get();
+  }
+
+  // ── Budgets ────────────────────────────────────────────────────────────────
+
+  /// All budget rows (overall + per-category), as a live stream.
+  Stream<List<Budget>> watchBudgets() => select(budgets).watch();
+
+  Future<List<Budget>> getAllBudgets() => select(budgets).get();
+
+  Future<void> upsertBudget(String categoryId, double amount) {
+    return into(budgets).insertOnConflictUpdate(
+      BudgetsCompanion.insert(categoryId: categoryId, amount: amount),
+    );
+  }
+
+  Future<void> deleteBudget(String categoryId) {
+    return (delete(budgets)..where((b) => b.categoryId.equals(categoryId))).go();
+  }
+
+  // ── Backup / restore ─────────────────────────────────────────────────────────
+
+  /// Atomically replaces ALL stored data (transactions + budgets) with the
+  /// given rows. Used when restoring a backup.
+  Future<void> replaceAll({
+    required List<TransactionsCompanion> txns,
+    required List<BudgetsCompanion> budgetRows,
+  }) {
+    return transaction(() async {
+      await delete(transactions).go();
+      await delete(budgets).go();
+      await batch((b) {
+        b.insertAll(transactions, txns);
+        b.insertAll(budgets, budgetRows);
+      });
+    });
   }
 }

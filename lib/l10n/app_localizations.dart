@@ -1028,6 +1028,12 @@ abstract class AppLocalizations {
   /// **'Edit my numbers'**
   String get settingsEditProfile;
 
+  /// No description provided for @settingsBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget'**
+  String get settingsBudget;
+
   /// No description provided for @settingsShare.
   ///
   /// In en, this message translates to:
@@ -1045,6 +1051,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version'**
   String get settingsVersion;
+
+  /// No description provided for @settingsData.
+  ///
+  /// In en, this message translates to:
+  /// **'Data & backup'**
+  String get settingsData;
+
+  /// No description provided for @settingsBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up my data'**
+  String get settingsBackup;
+
+  /// No description provided for @settingsBackupBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Save everything to a file you can keep.'**
+  String get settingsBackupBody;
+
+  /// No description provided for @settingsRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from a backup'**
+  String get settingsRestore;
+
+  /// No description provided for @settingsRestoreBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Import a backup file — replaces current data.'**
+  String get settingsRestoreBody;
+
+  /// No description provided for @backupShareSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Money Bird backup'**
+  String get backupShareSubject;
+
+  /// No description provided for @backupExportError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create the backup. Please try again.'**
+  String get backupExportError;
+
+  /// No description provided for @restoreConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore this backup?'**
+  String get restoreConfirmTitle;
+
+  /// No description provided for @restoreConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This replaces all your current transactions, budgets and profile with the backup\'s data. This can\'t be undone.'**
+  String get restoreConfirmBody;
+
+  /// No description provided for @restoreSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Restored 1 transaction} other{Restored {count} transactions}}'**
+  String restoreSuccess(int count);
+
+  /// No description provided for @restoreErrorCorrupt.
+  ///
+  /// In en, this message translates to:
+  /// **'That file isn\'t a valid Money Bird backup.'**
+  String get restoreErrorCorrupt;
+
+  /// No description provided for @restoreErrorNotMoneyBird.
+  ///
+  /// In en, this message translates to:
+  /// **'That file isn\'t a Money Bird backup.'**
+  String get restoreErrorNotMoneyBird;
+
+  /// No description provided for @restoreErrorVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup was made by a newer version of Money Bird. Update the app and try again.'**
+  String get restoreErrorVersion;
+
+  /// No description provided for @commonRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get commonRestore;
+
+  /// No description provided for @budgetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget'**
+  String get budgetTitle;
+
+  /// No description provided for @budgetOverall.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly budget'**
+  String get budgetOverall;
+
+  /// No description provided for @budgetOverallBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your total spending limit for the month.'**
+  String get budgetOverallBody;
+
+  /// No description provided for @budgetByCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'By category'**
+  String get budgetByCategory;
+
+  /// No description provided for @budgetAddCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Add category budget'**
+  String get budgetAddCategory;
+
+  /// No description provided for @budgetSpentOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{spent} of {limit}'**
+  String budgetSpentOf(String spent, String limit);
+
+  /// No description provided for @budgetLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} left'**
+  String budgetLeft(String amount);
+
+  /// No description provided for @budgetOver.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} over'**
+  String budgetOver(String amount);
+
+  /// No description provided for @budgetEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No budget yet'**
+  String get budgetEmptyTitle;
+
+  /// No description provided for @budgetEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a monthly budget to track spending and lift your health score.'**
+  String get budgetEmptyBody;
+
+  /// No description provided for @budgetSetCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a budget'**
+  String get budgetSetCta;
+
+  /// No description provided for @budgetSetLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Set limit'**
+  String get budgetSetLimit;
+
+  /// No description provided for @budgetRemoveCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get budgetRemoveCategory;
+
+  /// No description provided for @budgetNoCategoryBudgets.
+  ///
+  /// In en, this message translates to:
+  /// **'No category budgets yet.'**
+  String get budgetNoCategoryBudgets;
+
+  /// No description provided for @homeBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'This month\'s budget'**
+  String get homeBudget;
+
+  /// No description provided for @txnAllTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All transactions'**
+  String get txnAllTitle;
+
+  /// No description provided for @txnSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search notes…'**
+  String get txnSearchHint;
+
+  /// No description provided for @txnFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get txnFilterAll;
+
+  /// No description provided for @txnFilterClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get txnFilterClear;
+
+  /// No description provided for @txnNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching transactions'**
+  String get txnNoResults;
+
+  /// No description provided for @txnCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 transaction} other{{count} transactions}}'**
+  String txnCount(int count);
 
   /// No description provided for @shareCardTitle.
   ///

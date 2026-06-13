@@ -514,6 +514,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get settingsEditProfile => 'แก้ไขตัวเลขของฉัน';
 
   @override
+  String get settingsBudget => 'งบประมาณ';
+
+  @override
   String get settingsShare => 'แชร์สุขภาพการเงิน';
 
   @override
@@ -521,6 +524,135 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get settingsVersion => 'เวอร์ชัน';
+
+  @override
+  String get settingsData => 'ข้อมูลและการสำรอง';
+
+  @override
+  String get settingsBackup => 'สำรองข้อมูล';
+
+  @override
+  String get settingsBackupBody => 'บันทึกข้อมูลทั้งหมดเป็นไฟล์ที่เก็บไว้ได้';
+
+  @override
+  String get settingsRestore => 'กู้คืนจากไฟล์สำรอง';
+
+  @override
+  String get settingsRestoreBody => 'นำเข้าไฟล์สำรอง — จะแทนที่ข้อมูลปัจจุบัน';
+
+  @override
+  String get backupShareSubject => 'ไฟล์สำรอง Money Bird';
+
+  @override
+  String get backupExportError => 'สร้างไฟล์สำรองไม่สำเร็จ ลองอีกครั้ง';
+
+  @override
+  String get restoreConfirmTitle => 'กู้คืนไฟล์สำรองนี้?';
+
+  @override
+  String get restoreConfirmBody =>
+      'จะแทนที่รายการ งบประมาณ และข้อมูลการเงินปัจจุบันทั้งหมดด้วยข้อมูลในไฟล์สำรอง ย้อนกลับไม่ได้';
+
+  @override
+  String restoreSuccess(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'กู้คืน $count รายการแล้ว',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get restoreErrorCorrupt =>
+      'ไฟล์นี้ไม่ใช่ไฟล์สำรอง Money Bird ที่ถูกต้อง';
+
+  @override
+  String get restoreErrorNotMoneyBird => 'ไฟล์นี้ไม่ใช่ไฟล์สำรองของ Money Bird';
+
+  @override
+  String get restoreErrorVersion =>
+      'ไฟล์สำรองนี้สร้างจาก Money Bird เวอร์ชันใหม่กว่า กรุณาอัปเดตแอปแล้วลองใหม่';
+
+  @override
+  String get commonRestore => 'กู้คืน';
+
+  @override
+  String get budgetTitle => 'งบประมาณ';
+
+  @override
+  String get budgetOverall => 'งบรายเดือน';
+
+  @override
+  String get budgetOverallBody => 'วงเงินใช้จ่ายรวมต่อเดือน';
+
+  @override
+  String get budgetByCategory => 'แยกตามหมวด';
+
+  @override
+  String get budgetAddCategory => 'เพิ่มงบรายหมวด';
+
+  @override
+  String budgetSpentOf(String spent, String limit) {
+    return '$spent จาก $limit';
+  }
+
+  @override
+  String budgetLeft(String amount) {
+    return 'เหลือ $amount';
+  }
+
+  @override
+  String budgetOver(String amount) {
+    return 'เกิน $amount';
+  }
+
+  @override
+  String get budgetEmptyTitle => 'ยังไม่มีงบประมาณ';
+
+  @override
+  String get budgetEmptyBody =>
+      'ตั้งงบรายเดือนเพื่อติดตามการใช้จ่ายและเพิ่มคะแนนสุขภาพการเงิน';
+
+  @override
+  String get budgetSetCta => 'ตั้งงบประมาณ';
+
+  @override
+  String get budgetSetLimit => 'ตั้งวงเงิน';
+
+  @override
+  String get budgetRemoveCategory => 'ลบ';
+
+  @override
+  String get budgetNoCategoryBudgets => 'ยังไม่มีงบรายหมวด';
+
+  @override
+  String get homeBudget => 'งบเดือนนี้';
+
+  @override
+  String get txnAllTitle => 'รายการทั้งหมด';
+
+  @override
+  String get txnSearchHint => 'ค้นหาโน้ต…';
+
+  @override
+  String get txnFilterAll => 'ทั้งหมด';
+
+  @override
+  String get txnFilterClear => 'ล้างตัวกรอง';
+
+  @override
+  String get txnNoResults => 'ไม่พบรายการที่ตรงกัน';
+
+  @override
+  String txnCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count รายการ',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get shareCardTitle => 'สุขภาพการเงินของฉัน';

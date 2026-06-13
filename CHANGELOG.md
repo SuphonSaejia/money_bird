@@ -4,6 +4,32 @@ All notable changes to **Money Bird** are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] — 2026-06-13
+
+Keep your data safe, and take real control of your spending.
+
+### Added
+
+- **Backup & restore** — export everything (transactions, budgets, profile and
+  preferences) to a single JSON file via the share sheet, and restore it on a
+  new device or after a reinstall. No account needed; your data stays yours.
+  The backup format is versioned so it can grow with the app.
+- **Monthly budgets** — set an overall monthly spending limit plus optional
+  per-category caps, and watch this month's spending against each with a clear
+  progress bar. A compact budget card appears on Home once a limit is set.
+- **Smarter health score** — when you set your own monthly budget it now drives
+  the *spending-discipline* component of your financial-health score (it falls
+  back to the previous implied figure when no budget is set, so existing scores
+  are unchanged).
+- **Searchable transactions** — a new full transaction list, reachable from
+  *Recent activity → See all*, with free-text note search and filters by type
+  (income / expense) and category.
+
+### Changed
+
+- Database upgraded to schema v2 with a safe migration — existing transactions
+  are preserved on update.
+
 ## [1.0.0] — 2026-06-07
 
 First release. 🐦
@@ -50,4 +76,5 @@ First release. 🐦
 - `flutter analyze` is clean; unit tests cover the financial-health and
   savings-goal math, and smoke tests cover every screen.
 
+[1.1.0]: https://github.com/SuphonSaejia/money_bird/releases/tag/v1.1.0
 [1.0.0]: https://github.com/SuphonSaejia/money_bird/releases/tag/v1.0.0

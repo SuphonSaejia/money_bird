@@ -87,15 +87,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onbIncomeTitle => 'What\'s your monthly income?';
 
   @override
-  String get onbIncomeBody =>
-      'Your take-home pay after tax — salary, freelance, everything.';
+  String get onbIncomeBody => 'Your take-home pay after tax — salary, freelance, everything.';
 
   @override
   String get onbExpensesTitle => 'What are your fixed monthly expenses?';
 
   @override
-  String get onbExpensesBody =>
-      'Rent, bills, subscriptions and other regular costs.';
+  String get onbExpensesBody => 'Rent, bills, subscriptions and other regular costs.';
 
   @override
   String get onbSavingsTitle => 'How much have you saved so far?';
@@ -107,8 +105,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onbDebtTitle => 'How much do you pay toward debt monthly?';
 
   @override
-  String get onbDebtBody =>
-      'Loans, credit cards and instalments. Enter 0 if none.';
+  String get onbDebtBody => 'Loans, credit cards and instalments. Enter 0 if none.';
 
   @override
   String get onbGoalTitle => 'How much do you want to save each month?';
@@ -120,8 +117,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onbResultTitle => 'Your financial health';
 
   @override
-  String get onbResultBody =>
-      'Here\'s where you stand today. Track your spending and watch this grow.';
+  String get onbResultBody => 'Here\'s where you stand today. Track your spending and watch this grow.';
 
   @override
   String get onbResultCta => 'Enter Money Bird';
@@ -145,20 +141,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get healthNeedsWork => 'Needs work';
 
   @override
-  String get healthExcellentTip =>
-      'Outstanding! Your money habits are working beautifully.';
+  String get healthExcellentTip => 'Outstanding! Your money habits are working beautifully.';
 
   @override
-  String get healthGoodTip =>
-      'You\'re on a solid path. A little more saving goes a long way.';
+  String get healthGoodTip => 'You\'re on a solid path. A little more saving goes a long way.';
 
   @override
-  String get healthFairTip =>
-      'Decent footing. Trimming a few expenses will lift your score.';
+  String get healthFairTip => 'Decent footing. Trimming a few expenses will lift your score.';
 
   @override
-  String get healthNeedsWorkTip =>
-      'Let\'s build momentum — small daily wins add up fast.';
+  String get healthNeedsWorkTip => 'Let\'s build momentum — small daily wins add up fast.';
 
   @override
   String get metricSavingsRate => 'Savings rate';
@@ -210,8 +202,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get retirementSetupHint =>
-      'Add your age and monthly expenses to plan your retirement.';
+  String get retirementSetupHint => 'Add your age and monthly expenses to plan your retirement.';
 
   @override
   String retirementProgressOf(String saved, String target) {
@@ -270,8 +261,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get goalSetupHint =>
-      'Set a target amount and year to start tracking this goal.';
+  String get goalSetupHint => 'Set a target amount and year to start tracking this goal.';
 
   @override
   String goalSavingFor(String name) {
@@ -293,8 +283,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onbAgeTitle => 'How old are you?';
 
   @override
-  String get onbAgeBody =>
-      'We\'ll use this to plan your retirement savings and guide you there.';
+  String get onbAgeBody => 'We\'ll use this to plan your retirement savings and guide you there.';
 
   @override
   String get homeGreetingMorning => 'Good morning';
@@ -333,8 +322,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNoTransactions => 'No transactions yet';
 
   @override
-  String get homeNoTransactionsBody =>
-      'Tap the + button to log your first one.';
+  String get homeNoTransactionsBody => 'Tap the + button to log your first one.';
 
   @override
   String get homeStreak => 'Day streak';
@@ -496,8 +484,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsDailyReminder => 'Daily spending reminder';
 
   @override
-  String get settingsDailyReminderBody =>
-      'We\'ll nudge you to log today\'s spending.';
+  String get settingsDailyReminderBody => 'We\'ll nudge you to log today\'s spending.';
 
   @override
   String get settingsReminderTime => 'Reminder time';
@@ -509,14 +496,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTestNotificationSent => 'Test notification sent';
 
   @override
-  String get settingsNotificationsBlocked =>
-      'Notifications are turned off in system settings';
+  String get settingsNotificationsBlocked => 'Notifications are turned off in system settings';
 
   @override
   String get settingsFinancialProfile => 'Financial profile';
 
   @override
   String get settingsEditProfile => 'Edit my numbers';
+
+  @override
+  String get settingsBudget => 'Budget';
 
   @override
   String get settingsShare => 'Share my health';
@@ -526,6 +515,135 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsVersion => 'Version';
+
+  @override
+  String get settingsData => 'Data & backup';
+
+  @override
+  String get settingsBackup => 'Back up my data';
+
+  @override
+  String get settingsBackupBody => 'Save everything to a file you can keep.';
+
+  @override
+  String get settingsRestore => 'Restore from a backup';
+
+  @override
+  String get settingsRestoreBody => 'Import a backup file — replaces current data.';
+
+  @override
+  String get backupShareSubject => 'Money Bird backup';
+
+  @override
+  String get backupExportError => 'Couldn\'t create the backup. Please try again.';
+
+  @override
+  String get restoreConfirmTitle => 'Restore this backup?';
+
+  @override
+  String get restoreConfirmBody =>
+      'This replaces all your current transactions, budgets and profile with the backup\'s data. This can\'t be undone.';
+
+  @override
+  String restoreSuccess(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Restored $count transactions',
+      one: 'Restored 1 transaction',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get restoreErrorCorrupt => 'That file isn\'t a valid Money Bird backup.';
+
+  @override
+  String get restoreErrorNotMoneyBird => 'That file isn\'t a Money Bird backup.';
+
+  @override
+  String get restoreErrorVersion =>
+      'This backup was made by a newer version of Money Bird. Update the app and try again.';
+
+  @override
+  String get commonRestore => 'Restore';
+
+  @override
+  String get budgetTitle => 'Budget';
+
+  @override
+  String get budgetOverall => 'Monthly budget';
+
+  @override
+  String get budgetOverallBody => 'Your total spending limit for the month.';
+
+  @override
+  String get budgetByCategory => 'By category';
+
+  @override
+  String get budgetAddCategory => 'Add category budget';
+
+  @override
+  String budgetSpentOf(String spent, String limit) {
+    return '$spent of $limit';
+  }
+
+  @override
+  String budgetLeft(String amount) {
+    return '$amount left';
+  }
+
+  @override
+  String budgetOver(String amount) {
+    return '$amount over';
+  }
+
+  @override
+  String get budgetEmptyTitle => 'No budget yet';
+
+  @override
+  String get budgetEmptyBody => 'Set a monthly budget to track spending and lift your health score.';
+
+  @override
+  String get budgetSetCta => 'Set a budget';
+
+  @override
+  String get budgetSetLimit => 'Set limit';
+
+  @override
+  String get budgetRemoveCategory => 'Remove';
+
+  @override
+  String get budgetNoCategoryBudgets => 'No category budgets yet.';
+
+  @override
+  String get homeBudget => 'This month\'s budget';
+
+  @override
+  String get txnAllTitle => 'All transactions';
+
+  @override
+  String get txnSearchHint => 'Search notes…';
+
+  @override
+  String get txnFilterAll => 'All';
+
+  @override
+  String get txnFilterClear => 'Clear filters';
+
+  @override
+  String get txnNoResults => 'No matching transactions';
+
+  @override
+  String txnCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count transactions',
+      one: '1 transaction',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get shareCardTitle => 'My financial health';
@@ -563,8 +681,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifReminderTitle => 'Track today\'s spending';
 
   @override
-  String get notifReminderBody =>
-      'How much did you spend today? Tap to log it before you forget.';
+  String get notifReminderBody => 'How much did you spend today? Tap to log it before you forget.';
 
   @override
   String get notifSummaryTitle => 'Today\'s wrap-up';

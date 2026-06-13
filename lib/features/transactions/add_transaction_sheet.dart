@@ -15,10 +15,7 @@ import '../../l10n/app_localizations.dart';
 import '../../providers/providers.dart';
 
 /// Opens the add / edit transaction sheet. Pass [existing] to edit.
-Future<void> showAddTransactionSheet(
-  BuildContext context, {
-  Transaction? existing,
-}) {
+Future<void> showAddTransactionSheet(BuildContext context, {Transaction? existing}) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -35,8 +32,7 @@ class AddTransactionSheet extends ConsumerStatefulWidget {
   final Transaction? existing;
 
   @override
-  ConsumerState<AddTransactionSheet> createState() =>
-      _AddTransactionSheetState();
+  ConsumerState<AddTransactionSheet> createState() => _AddTransactionSheetState();
 }
 
 class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet> {
@@ -55,9 +51,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet> {
     _categoryId = e?.categoryId ?? Categories.forType(_type).first.id;
     _date = e?.date ?? DateTime.now();
     _amount = TextEditingController(
-      text: e == null ? '' : (e.amount % 1 == 0
-          ? e.amount.toStringAsFixed(0)
-          : e.amount.toStringAsFixed(2)),
+      text: e == null ? '' : (e.amount % 1 == 0 ? e.amount.toStringAsFixed(0) : e.amount.toStringAsFixed(2)),
     );
     _note = TextEditingController(text: e?.note ?? '');
   }
@@ -69,8 +63,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet> {
     super.dispose();
   }
 
-  Color get _accent =>
-      _type.isIncome ? AppColors.income : AppColors.primary;
+  Color get _accent => _type.isIncome ? AppColors.income : AppColors.primary;
 
   void _switchType(int index) {
     setState(() {
@@ -99,21 +92,11 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet> {
     final note = _note.text.trim().isEmpty ? null : _note.text.trim();
     final e = widget.existing;
     if (e == null) {
-      await repo.add(
-        amount: value,
-        type: _type,
-        categoryId: _categoryId,
-        note: note,
-        date: _date,
-      );
+      await repo.add(amount: value, type: _type, categoryId: _categoryId, note: note, date: _date);
     } else {
-      await repo.update(e.copyWith(
-        amount: value,
-        type: _type,
-        categoryId: _categoryId,
-        note: Value(note),
-        date: _date,
-      ));
+      await repo.update(
+        e.copyWith(amount: value, type: _type, categoryId: _categoryId, note: Value(note), date: _date),
+      );
     }
     if (mounted) Navigator.of(context).pop();
   }
@@ -132,14 +115,12 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet> {
       child: Container(
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(AppRadius.xxl)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(AppRadius.xxl)),
         ),
         child: SafeArea(
           top: false,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-                AppSpacing.xl, AppSpacing.md, AppSpacing.xl, AppSpacing.xl),
+            padding: const EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.md, AppSpacing.xl, AppSpacing.xl),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,9 +140,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet> {
                   children: [
                     Expanded(
                       child: Text(
-                        widget.existing == null
-                            ? l10n.txnNewTitle
-                            : l10n.txnEditTitle,
+                        widget.existing == null ? l10n.txnNewTitle : l10n.txnEditTitle,
                         style: theme.textTheme.headlineSmall,
                       ),
                     ),
@@ -192,19 +171,16 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet> {
                       controller: _amount,
                       autofocus: true,
                       textAlign: TextAlign.center,
-                      keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: amountFormatters(),
-                      style: theme.textTheme.displayMedium
-                          ?.copyWith(color: _accent),
+                      style: theme.textTheme.displayMedium?.copyWith(color: _accent),
                       onChanged: (_) {
                         if (_amountError) setState(() => _amountError = false);
                       },
                       decoration: InputDecoration(
                         filled: false,
                         prefixText: '฿ ',
-                        prefixStyle: theme.textTheme.headlineMedium
-                            ?.copyWith(color: _accent),
+                        prefixStyle: theme.textTheme.headlineMedium?.copyWith(color: _accent),
                         hintText: '0',
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
@@ -215,12 +191,6 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet> {
                     ),
                   ),
                 ),
-                if (_amountError)
-                  Center(
-                    child: Text(l10n.txnAmountError,
-                        style: theme.textTheme.bodySmall
-                            ?.copyWith(color: AppColors.danger)),
-                  ),
                 const SizedBox(height: AppSpacing.lg),
                 Text(l10n.txnCategory, style: theme.textTheme.titleSmall),
                 const SizedBox(height: AppSpacing.md),
@@ -243,9 +213,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet> {
                       child: _FieldButton(
                         icon: Icons.event_rounded,
                         label: l10n.txnDate,
-                        value: isToday
-                            ? l10n.commonToday
-                            : DateFormat.yMMMd(locale).format(_date),
+                        value: isToday ? l10n.commonToday : DateFormat.yMMMd(locale).format(_date),
                         onTap: _pickDate,
                       ),
                     ),
@@ -276,11 +244,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet> {
 }
 
 class _CategoryChip extends StatelessWidget {
-  const _CategoryChip({
-    required this.category,
-    required this.selected,
-    required this.onTap,
-  });
+  const _CategoryChip({required this.category, required this.selected, required this.onTap});
 
   final AppCategory category;
   final bool selected;
@@ -296,14 +260,9 @@ class _CategoryChip extends StatelessWidget {
         duration: const Duration(milliseconds: 160),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
         decoration: BoxDecoration(
-          color: selected
-              ? category.color.withValues(alpha: 0.14)
-              : theme.colorScheme.surfaceContainerHighest,
+          color: selected ? category.color.withValues(alpha: 0.14) : theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(AppRadius.pill),
-          border: Border.all(
-            color: selected ? category.color : Colors.transparent,
-            width: 1.4,
-          ),
+          border: Border.all(color: selected ? category.color : Colors.transparent, width: 1.4),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -325,12 +284,7 @@ class _CategoryChip extends StatelessWidget {
 }
 
 class _FieldButton extends StatelessWidget {
-  const _FieldButton({
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.onTap,
-  });
+  const _FieldButton({required this.icon, required this.label, required this.value, required this.onTap});
 
   final IconData icon;
   final String label;
@@ -345,10 +299,7 @@ class _FieldButton extends StatelessWidget {
       borderRadius: AppRadius.input,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceContainerHighest,
-          borderRadius: AppRadius.input,
-        ),
+        decoration: BoxDecoration(color: theme.colorScheme.surfaceContainerHighest, borderRadius: AppRadius.input),
         child: Row(
           children: [
             Icon(icon, size: 20, color: theme.colorScheme.onSurface),

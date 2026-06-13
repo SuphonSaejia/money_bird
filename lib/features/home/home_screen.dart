@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/utils/currency_formatter.dart';
+import '../../core/widgets/app_card.dart';
 import '../../core/widgets/gradient_scaffold.dart';
 import '../../core/widgets/section_header.dart';
 import '../../core/widgets/goal_card.dart';
@@ -13,7 +14,9 @@ import '../../core/widgets/stat_tile.dart';
 import '../../domain/month_summary.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/providers.dart';
+import '../budget/budget_screen.dart';
 import '../share/share_preview_screen.dart';
+import '../transactions/transactions_screen.dart';
 import 'widgets/health_card.dart';
 import 'widgets/recent_activity.dart';
 
@@ -47,10 +50,15 @@ class HomeScreen extends ConsumerWidget {
             SectionHeader(title: l10n.homeOverview),
             const SizedBox(height: AppSpacing.lg),
             _Overview(summary: summary, locale: locale),
+            const _BudgetGlance(),
             const SizedBox(height: AppSpacing.xxl),
             GoalCard(plan: ref.watch(goalPlanProvider)),
             const SizedBox(height: AppSpacing.xxl),
-            SectionHeader(title: l10n.homeRecent),
+            SectionHeader(
+              title: l10n.homeRecent,
+              actionLabel: l10n.commonSeeAll,
+              onAction: () => openTransactionsScreen(context),
+            ),
             const SizedBox(height: AppSpacing.lg),
             const RecentActivity(),
           ],
@@ -180,6 +188,89 @@ class _Overview extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// A compact month-budget progress card shown on the home screen, but only once
+/// the user has set an overall monthly budget. Tapping opens the budget screen.
+class _BudgetGlance extends ConsumerWidget {
+  const _BudgetGlance();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
+    final overview = ref.watch(budgetOverviewProvider);
+
+    if (!overview.hasOverall) return const SizedBox.shrink();
+
+    final over = overview.isOverallOver;
+    final fill = over ? AppColors.danger : AppColors.primary;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.xxl),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SectionHeader(
+            title: l10n.homeBudget,
+            actionLabel: l10n.commonSeeAll,
+            onAction: () => openBudgetScreen(context),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          AppCard(
+            onTap: () => openBudgetScreen(context),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        CurrencyFormatter.format(overview.overallSpent,
+                            locale: locale),
+                        style: theme.textTheme.headlineSmall,
+                      ),
+                    ),
+                    Text(
+                      '/ ${CurrencyFormatter.format(overview.overallLimit!, locale: locale)}',
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.md),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
+                  child: LinearProgressIndicator(
+                    value: overview.overallRatio.clamp(0.0, 1.0),
+                    minHeight: 8,
+                    backgroundColor: AppColors.ringTrack,
+                    valueColor: AlwaysStoppedAnimation<Color>(fill),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  over
+                      ? l10n.budgetOver(CurrencyFormatter.format(
+                          -overview.overallRemaining,
+                          locale: locale))
+                      : l10n.budgetLeft(CurrencyFormatter.format(
+                          overview.overallRemaining,
+                          locale: locale)),
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: over ? AppColors.danger : AppColors.income,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

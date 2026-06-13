@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -421,7 +423,8 @@ class _DataCard extends ConsumerWidget {
         title: Text(l10n.restoreConfirmTitle),
         content: Text(l10n.restoreConfirmBody),
         actions: [
-          TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: Text(l10n.commonCancel)),
+          OutlinedButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: Text(l10n.commonCancel)),
+          SizedBox(height: AppSpacing.sm),
           FilledButton(onPressed: () => Navigator.of(dialogContext).pop(true), child: Text(l10n.commonRestore)),
         ],
       ),
@@ -436,7 +439,9 @@ class _DataCard extends ConsumerWidget {
     }
 
     try {
-      final summary = await ref.read(backupServiceProvider).restoreFromJson(String.fromCharCodes(bytes));
+      // Backups are written as UTF-8; decode as UTF-8 so non-ASCII notes
+      // (e.g. Thai) survive the round-trip instead of becoming mojibake.
+      final summary = await ref.read(backupServiceProvider).restoreFromJson(utf8.decode(bytes));
       // Profile & settings live in SharedPreferences-backed notifiers; nudge
       // them to reload. Transaction/budget streams update on their own.
       ref.invalidate(profileProvider);

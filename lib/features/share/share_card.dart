@@ -28,8 +28,8 @@ class ShareCard extends StatelessWidget {
     final dark = AppColors.textPrimary;
     final muted = AppColors.textSecondary;
 
-    TextStyle prompt(double s, FontWeight w, Color c) => TextStyle(
-        fontFamily: 'Prompt', fontSize: s, fontWeight: w, color: c, height: 1.1);
+    TextStyle prompt(double s, FontWeight w, Color c) =>
+        TextStyle(fontFamily: 'Prompt', fontSize: s, fontWeight: w, color: c, height: 1.1);
 
     return Container(
       width: width,
@@ -57,50 +57,37 @@ class ShareCard extends StatelessWidget {
                   Text('Money Bird', style: prompt(17, FontWeight.w700, dark)),
                 ],
               ),
-              Text(DateFormat.yMMM(locale).format(DateTime.now()),
-                  style: prompt(13, FontWeight.w500, muted)),
+              Text(DateFormat.yMMM(locale).format(DateTime.now()), style: prompt(13, FontWeight.w500, muted)),
             ],
           ),
           const SizedBox(height: AppSpacing.xl),
           Text(l10n.shareCardTitle, style: prompt(15, FontWeight.w500, muted)),
           const SizedBox(height: AppSpacing.lg),
           HealthRingChart(
-            size: 184,
+            size: 220,
             strokeWidth: 15,
             gap: 7,
-            rings: [
-              for (final m in health.rings)
-                RingData(value: m.value, color: m.key.color),
-            ],
-            center: Text('${health.score}%',
-                style: prompt(44, FontWeight.w700, dark)),
+            rings: [for (final m in health.rings) RingData(value: m.value, color: m.key.color)],
+            center: Text('${health.score}%', style: prompt(44, FontWeight.w700, dark)),
           ),
           const SizedBox(height: AppSpacing.lg),
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
               color: band.color.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(AppRadius.pill),
             ),
-            child: Text(band.label(l10n),
-                style: prompt(15, FontWeight.w600, band.color)),
+            child: Text(band.label(l10n), style: prompt(15, FontWeight.w600, band.color)),
           ),
           const SizedBox(height: AppSpacing.xl),
           for (final m in health.rings) ...[
-            _LegendRow(
-              color: m.key.color,
-              label: m.key.label(l10n),
-              detail: m.detail,
-              styleBuilder: prompt,
-            ),
+            _LegendRow(color: m.key.color, label: m.key.label(l10n), detail: m.detail, styleBuilder: prompt),
             const SizedBox(height: 10),
           ],
           const SizedBox(height: AppSpacing.sm),
           Divider(color: AppColors.border, height: 1),
           const SizedBox(height: AppSpacing.md),
-          Text(l10n.shareCardMadeWith,
-              style: prompt(13, FontWeight.w500, muted)),
+          Text(l10n.shareCardMadeWith, style: prompt(13, FontWeight.w500, muted)),
         ],
       ),
     );
@@ -108,12 +95,7 @@ class ShareCard extends StatelessWidget {
 }
 
 class _LegendRow extends StatelessWidget {
-  const _LegendRow({
-    required this.color,
-    required this.label,
-    required this.detail,
-    required this.styleBuilder,
-  });
+  const _LegendRow({required this.color, required this.label, required this.detail, required this.styleBuilder});
 
   final Color color;
   final String label;
@@ -130,10 +112,7 @@ class _LegendRow extends StatelessWidget {
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 10),
-        Expanded(
-          child: Text(label,
-              style: styleBuilder(14, FontWeight.w500, AppColors.textSecondary)),
-        ),
+        Expanded(child: Text(label, style: styleBuilder(14, FontWeight.w500, AppColors.textSecondary))),
         Text(detail, style: styleBuilder(15, FontWeight.w600, AppColors.textPrimary)),
       ],
     );

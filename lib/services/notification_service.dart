@@ -38,12 +38,23 @@ class NotificationService {
     _ready = true;
   }
 
-  /// Asks the OS for notification permission. Returns true if granted.
+  AndroidFlutterLocalNotificationsPlugin? get _android =>
+      _plugin.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+
+  /// Asks the OS for notification permission. Returns true if granted. Also
+  /// makes sure exact alarms are allowed so the reminder fires on time (on
+  /// Android 12/14 this may open the system "Alarms & reminders" screen).
   Future<bool> requestPermissions() async {
     await init();
-    final android = _plugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
+    final android = _android;
     final androidGranted = await android?.requestNotificationsPermission();
+    if (android != null) {
+      final canExact = await android.canScheduleExactNotifications();
+      if (canExact == false) {
+        await android.requestExactAlarmsPermission();
+      }
+    }
     final ios = _plugin.resolvePlatformSpecificImplementation<
         IOSFlutterLocalNotificationsPlugin>();
     final iosGranted = await ios?.requestPermissions(
@@ -73,6 +84,10 @@ class NotificationService {
   }
 
   /// Schedules (or replaces) the recurring daily reminder at [hour]:[minute].
+  ///
+  /// Prefers an exact alarm so it fires on time; if exact alarms aren't
+  /// permitted it falls back to an inexact one (which Android may delay) rather
+  /// than failing, so the user still gets reminders.
   Future<void> scheduleDailyReminder({
     required int hour,
     required int minute,
@@ -83,15 +98,35 @@ class NotificationService {
   }) async {
     await init();
     await _plugin.cancel(id: AppConstants.reminderNotificationId);
-    await _plugin.zonedSchedule(
-      id: AppConstants.reminderNotificationId,
-      title: title,
-      body: body,
-      scheduledDate: _nextInstanceOf(hour, minute),
-      notificationDetails: _details(channelName, channelDesc),
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.time,
-    );
+
+    final canExact = await _android?.canScheduleExactNotifications() ?? true;
+    final mode = canExact
+        ? AndroidScheduleMode.exactAllowWhileIdle
+        : AndroidScheduleMode.inexactAllowWhileIdle;
+
+    Future<void> schedule(AndroidScheduleMode scheduleMode) {
+      return _plugin.zonedSchedule(
+        id: AppConstants.reminderNotificationId,
+        title: title,
+        body: body,
+        scheduledDate: _nextInstanceOf(hour, minute),
+        notificationDetails: _details(channelName, channelDesc),
+        androidScheduleMode: scheduleMode,
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
+    }
+
+    try {
+      await schedule(mode);
+    } on Exception {
+      // "exact_alarms_not_permitted" (revoked between the check and the call) —
+      // retry inexact so reminders still work.
+      if (mode == AndroidScheduleMode.exactAllowWhileIdle) {
+        await schedule(AndroidScheduleMode.inexactAllowWhileIdle);
+      } else {
+        rethrow;
+      }
+    }
   }
 
   Future<void> cancelReminder() async {
